@@ -2,7 +2,10 @@
   "name": "@light-arrow/express",
   "version": "0.1.0",
   "description": "arrow bindings for express",
-  "repository": "https://github.com/lauri3new/light-arrow",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "https://github.com/lauri3new/light-arrow-express",
   "main": "dist/index.js",
   "files": [
     "dist/**/*"
