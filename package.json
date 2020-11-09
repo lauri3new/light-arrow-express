@@ -9,7 +9,6 @@
   ],
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "jest --verbose --env=node",
     "test:dev": "jest --verbose --env=node --watchAll",
     "build": "tsc",
     "lint": "npx eslint --fix './src/**/*'",
