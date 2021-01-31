@@ -8,6 +8,18 @@ import {
 export type HttpRoutes<A extends Context = Context> = Arrow<A, notFound | Result, Result> | Arrow<A, notFound, Result>
 export type HttpApp<A extends Context = Context> = (ctx: A) => Promise<Result>
 
+export const bindArrowApp = <A, B extends Body = any, C extends Body = any>(
+  arrowApp: Arrow<A, Result<B>, Result<C>>
+) => (app: Express, capabilities: A, onError: (e?: Error) => Result) => {
+  app.use('*', (req, res) => arrowApp.runAsPromiseResult({ req, ...capabilities })
+    .catch(onError)
+    .then((result) => runResponse(res, result)))
+  return {
+    app,
+    capabilities
+  }
+}
+
 export const bindApp = <A>(HttpApp: HttpApp<A & Context>, capabilities: A) => (app: Express) => {
   app.use('*', (req, res) => HttpApp({ req, ...capabilities }).then((result) => {
     runResponse(res, result)
