@@ -143,13 +143,3 @@ export const runResponse = (res: Response, result: Result) => {
   }
   res.status(result.status).send(result.body)
 }
-
-const authorizationMiddleware: Arrow<Context, Result, {
-  loggedIn: boolean;
-  req: Request;
-}> = draw((ctx: Context) => {
-  if (ctx.req.headers.authorization) {
-    return resolve({ ...ctx, loggedIn: true })
-  }
-  return reject(Unauthorised({}))
-})

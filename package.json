@@ -1,6 +1,6 @@
 {
   "name": "@light-arrow/express",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "arrow bindings for express",
   "publishConfig": {
     "access": "public"
@@ -31,7 +31,7 @@
     "typescript": "^4.0.3"
   },
   "dependencies": {
-    "@light-arrow/arrow": "^1.0.1",
+    "@light-arrow/arrow": "^1.1.4",
     "path-to-regexp": "^6.2.0"
   }
 }
