@@ -60,7 +60,7 @@ export interface Result<A extends body = any> {
 }
 
 export function isResult(a: Result | any): a is Result {
-  return ['undefined', 'object', 'string'].includes(a?.body) && typeof a?.status === 'number'
+  return ['undefined', 'object', 'string'].includes(typeof a?.body) && typeof a?.status === 'number'
 }
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
