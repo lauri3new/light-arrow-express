@@ -67,6 +67,14 @@ export const put = matchMethodAndPath(HttpMethods.PUT)
 export const del = matchMethodAndPath(HttpMethods.DELETE)
 export const options = matchMethodAndPath(HttpMethods.OPTIONS)
 
+export const filter = <A extends Context = Context>(path: string) => Arrow<A, notFound, undefined>(async (ctx: A) => {
+  const _match = match(path)(ctx.req.baseUrl)
+  if (_match) {
+    return Right(undefined)
+  }
+  return Left({ path: ctx.req.path, method: ctx.req.method })
+})
+
 export function router <D1, E1, R1, D2, E2, R2>(a: Arrow<D1, E1, R1>, b: Arrow<D2, E2, R2>): Arrow<D1 & D2, E1 | E2, R1 | R2>
 export function router <D1, E1, R1, D2, E2, R2, D3, E3, R3>(a: Arrow<D1, E1, R1>, b: Arrow<D2, E2, R2>, c: Arrow<D3, E3, R3>): Arrow<D1 & D2 & D3, E1 | E2 | E3, R1 | R2 | R3>
 export function router <D1, E1, R1, D2, E2, R2, D3, E3, R3, D4, E4, R4>(a: Arrow<D1, E1, R1>, b: Arrow<D2, E2, R2>, c: Arrow<D3, E3, R3>, d: Arrow<D4, E4, R4>): Arrow<D1 & D2 & D3 & D4, E1 | E2 | E3 | E4, R1 | R2 | R3 | R4>
