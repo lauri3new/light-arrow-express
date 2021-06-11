@@ -11,9 +11,22 @@ export type HttpApp<A extends Context = Context> = (ctx: A) => Promise<Result>
 export const bindArrowApp = <A, B extends Body = any, C extends Body = any>(
   arrowApp: Arrow<A & Context, Result<B>, Result<C>>
 ) => (app: Express, capabilities: A, onError: (e?: Error) => Result) => {
-  app.use('*', (req, res) => arrowApp.runAsPromiseResult({ req, ...capabilities })
-    .catch(onError)
-    .then((result) => runResponse(res, result)))
+  app.use('*', (req, res) => arrowApp.runAsPromise({ req, ...capabilities })
+    .then(({
+        result,
+        error,
+        failure
+      }) => {
+        if (failure) {
+          return onError(failure)
+        } if (error && isResult(error)) {
+          return error
+        }
+        return result
+    })
+    .then((result) => {
+      runResponse(res, result)
+    }))
   return {
     app,
     capabilities
@@ -57,7 +70,7 @@ const matchMethodAndPath = (method: HttpMethods) => <B extends object = object, 
   if (_match && ctx.req.method.toLowerCase() === method) {
     return Right(({ ...ctx, params: _match.params as B }))
   }
-  return Left({ path: ctx.req.path, method: ctx.req.method })
+  return Left({ path: ctx.req.originalUrl, method: ctx.req.method })
 })
 
 export const get = matchMethodAndPath(HttpMethods.GET)
